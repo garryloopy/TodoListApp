@@ -4,7 +4,9 @@
  * @format
  */
 
-import React from 'react';
+import { 
+  React, useState
+} from 'react';
 
 import ToDoForm from './ToDoForm';
 import TodoList from './ToDoList';
@@ -13,16 +15,6 @@ import {
   SafeAreaView,
   StyleSheet,
 } from 'react-native';
-
-
-function App() {
-  return (
-    <SafeAreaView>
-      <TodoList styles={styles}/>
-      <ToDoForm styles={styles}/>
-    </SafeAreaView>
-  );
-}
 
 const styles = StyleSheet.create({
   task: {
@@ -53,4 +45,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+const hardCodedTasks = [
+  'Do laundry',
+  'Go to gym',
+  'Walk dog',
+  "Cry in the bathroom"
+];
+
+export default function App() {
+  const [tasks, setTasks] = useState(hardCodedTasks);
+
+  return (
+    <SafeAreaView>
+      <TodoList styles={styles} tasks={tasks}/>
+      <ToDoForm styles={styles}/>
+    </SafeAreaView>
+  );
+}
