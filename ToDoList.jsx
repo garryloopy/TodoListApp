@@ -1,27 +1,50 @@
 import {
-    Pressable,
     ScrollView,
-    Text,
-    View,
+    Button
 } from "react-native";
 
+import Task from "./Task";
 
-export default function TodoList( {styles, tasks} ) {
+import { useState } from "react";
+
+export default function TodoList( {styles, tasks, onTaskDelete} ) {
+    const [selectedTasks, setSelectedTasks] = useState([]);
+
+    const handleOnTaskSelect = (task) => {
+        if (selectedTasks.includes(task)) {
+            setSelectedTasks(
+                selectedTasks.filter((currentTask) => currentTask != task)
+            )
+            return;
+        }
+
+        setSelectedTasks(
+            [
+                ...selectedTasks,
+                task
+            ]
+        )
+    }
+
+    const handleOnTaskDelete = () => {
+        onTaskDelete(selectedTasks);
+        setSelectedTasks([]);
+    }
 
     return (
         <ScrollView>
-
             {
                 tasks.map(
                     (task) => (
-                        <Pressable>
-                            <View style={[styles.task, styles.completed]}>
-                                <Text style={styles.taskText}>{task}</Text>
-                            </View>
-                        </Pressable>
+                        <Task styles={styles} 
+                              task={task} 
+                              key={task}
+                              isSelected={selectedTasks.includes(task)}
+                              onTaskSelect={handleOnTaskSelect}/>
                     )
                 )
             }
+            <Button title={selectedTasks.length <= 0 ? "No tasks selected" : `Delete ${selectedTasks.length} tasks`}  onPress={handleOnTaskDelete}/>
         </ScrollView>
     )
 }

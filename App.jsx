@@ -8,12 +8,14 @@ import {
   React, useState
 } from 'react';
 
+
 import ToDoForm from './ToDoForm';
 import TodoList from './ToDoList';
 
 import {
   SafeAreaView,
   StyleSheet,
+  Alert
 } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -21,6 +23,9 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderColor: '#ccc',
+  },
+  unfinished: {
+    backgroundColor: '#f9f9f9',
   },
   completed: {
     backgroundColor: '#e0e0e0',
@@ -52,13 +57,39 @@ const hardCodedTasks = [
   "Cry in the bathroom"
 ];
 
+
 export default function App() {
   const [tasks, setTasks] = useState(hardCodedTasks);
 
+  const handleAddTask = (task) => {
+    if (tasks.some((currentTask) => currentTask === task)) {
+      return Alert.alert(
+        'Duplicate task',
+        `${task} is already on your list`,
+        [
+          {
+            text: 'Sounds good',
+            style: 'cancel',
+          },
+        ],
+      );
+    }
+
+    setTasks(
+      [...tasks, task]
+    )
+  }
+
+  const handleOnTaskDelete = (tasksToBeDeleted) => {
+    setTasks(
+      tasks.filter((currentTask) => !tasksToBeDeleted.includes(currentTask))
+    );
+  }
+
   return (
     <SafeAreaView>
-      <TodoList styles={styles} tasks={tasks}/>
-      <ToDoForm styles={styles}/>
+      <TodoList styles={styles} tasks={tasks} onTaskDelete={handleOnTaskDelete}/>
+      <ToDoForm styles={styles} addTask={handleAddTask}/>
     </SafeAreaView>
   );
 }
