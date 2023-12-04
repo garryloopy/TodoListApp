@@ -82,7 +82,7 @@ export default function HomeScreen( {navigation} ) {
     
     return (
       <MainLayout>
-        <View>
+        <View style={{display:"flex", flexDirection: "column", gap: 20}}>
             <TodoList styles={styles} tasks={tasks} onTaskDelete={handleOnTaskDelete}/>
             <ToDoForm styles={styles} addTask={handleAddTask}/>
             <Button title="Go to About"
